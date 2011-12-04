@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VexTab</title>
+    <link href='http://fonts.googleapis.com/css?family=OFL+Sorts+Mill+Goudy+TT|Yanone+Kaffeesatz|Tangerine'
+          rel='stylesheet' type='text/css'>
+    <link href="tabdiv.css" media="screen" rel="Stylesheet" type="text/css"/>
+    <link href="style.css" media="screen" rel="Stylesheet" type="text/css"/>
+
+    <script type="text/javascript"
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+    </script>
+
+    <!-- VexFlow Uncompiled Sources -->
+    <script src="../src/header.js"></script>
+    <script src="../src/vex.js"></script>
+    <script src="../src/flow.js"></script>
+    <script src="../src/tables.js"></script>
+    <script src="../src/fonts/vexflow_font.js"></script>
+    <script src="../src/glyph.js"></script>
+    <script src="../src/stavemodifier.js"></script>
+    <script src="../src/stavebarline.js"></script>
+    <script src="../src/stave.js"></script>
+    <script src="../src/staveconnector.js"></script>
+    <script src="../src/tabstave.js"></script>
+    <script src="../src/tickcontext.js"></script>
+    <script src="../src/tickable.js"></script>
+    <script src="../src/note.js"></script>
+    <script src="../src/barnote.js"></script>
+    <script src="../src/ghostnote.js"></script>
+    <script src="../src/stavenote.js"></script>
+    <script src="../src/tabnote.js"></script>
+    <script src="../src/beam.js"></script>
+    <script src="../src/voice.js"></script>
+    <script src="../src/modifier.js"></script>
+    <script src="../src/modifiercontext.js"></script>
+    <script src="../src/accidental.js"></script>
+    <script src="../src/dot.js"></script>
+    <script src="../src/formatter.js"></script>
+    <script src="../src/stavetie.js"></script>
+    <script src="../src/tabtie.js"></script>
+    <script src="../src/tabslide.js"></script>
+    <script src="../src/bend.js"></script>
+    <script src="../src/vibrato.js"></script>
+    <script src="../src/annotation.js"></script>
+    <script src="../src/tuning.js"></script>
+    <script src="../src/keysignature.js"></script>
+    <script src="../src/timesignature.js"></script>
+    <script src="../src/clef.js"></script>
+    <script src="../src/music.js"></script>
+    <script src="../src/keymanager.js"></script>
+    <script src="../src/renderer.js"></script>
+    <script src="../src/raphaelcontext.js"></script>
+
+    <!-- VexFlow Compiled Source -->
+    <script src="../vexflow.js"></script>
+
+    <!-- VexTab Source -->
+    <script src="../vextab/vextab.js"></script>
+
+    <!-- Support Sources -->
+    <script src="../tabdib/support/jquery.js"></script>
+    <script src="support/raphael.js"></script>
+    <!--
+      TabDiv Sources
+
+      If you include raphael.js, TabDiv will render SVG (or VML on IE). If you
+      don't, it uses HTML5 canvas.
+    -->
+    <!--<script src="tabdiv.js"></script>-->
+    <!--<script src="../vextabdiv.js"></script>-->
+
+    <script src="mll.js"></script>
+    <script src="tab_example.js"></script>
+
+</head>
+
+<body>
+
+
+<div class="content">
+    <canvas id="myCanvas" width="700" height="100"></canvas>
+    <script type="text/javascript">
+        drawMyVexFlowStave()
+    </script>
+</div>
+
+</body>
+</html>

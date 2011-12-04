@@ -382,16 +382,31 @@ Vex.Flow.durationToTicks = {
   "8m":   Vex.Flow.RESOLUTION / 8,
   "8r":   Vex.Flow.RESOLUTION / 8,
   "8d":   (Vex.Flow.RESOLUTION / 8) + (Vex.Flow.RESOLUTION / 16),
+  "8t":   Vex.Flow.RESOLUTION / 12,
+  "8th":  Vex.Flow.RESOLUTION / 12,
+  "8tm":  Vex.Flow.RESOLUTION / 12,
+  "8tr":  Vex.Flow.RESOLUTION / 12,
+  "8td":  (Vex.Flow.RESOLUTION / 12) + (Vex.Flow.RESOLUTION / 24),
   "16":   Vex.Flow.RESOLUTION / 16,
   "16h":  Vex.Flow.RESOLUTION / 16,
   "16m":  Vex.Flow.RESOLUTION / 16,
   "16r":  Vex.Flow.RESOLUTION / 16,
   "16d":  (Vex.Flow.RESOLUTION / 16) + (Vex.Flow.RESOLUTION / 32),
+  "16t":  Vex.Flow.RESOLUTION / 24,
+  "16th": Vex.Flow.RESOLUTION / 24,
+  "16tm": Vex.Flow.RESOLUTION / 24,
+  "16tr": Vex.Flow.RESOLUTION / 24,
+  "16td": (Vex.Flow.RESOLUTION / 24) + (Vex.Flow.RESOLUTION / 48),
   "32":   Vex.Flow.RESOLUTION / 32,
   "32h":  Vex.Flow.RESOLUTION / 32,
   "32m":  Vex.Flow.RESOLUTION / 32,
-  "32d":  (Vex.Flow.RESOLUTION / 32) + (Vex.Flow.RESOLUTION / 64),
   "32r":  Vex.Flow.RESOLUTION / 32,
+  "32d":  (Vex.Flow.RESOLUTION / 32) + (Vex.Flow.RESOLUTION / 64),
+  "32t":  Vex.Flow.RESOLUTION / 48,
+  "32th": Vex.Flow.RESOLUTION / 48,
+  "32tm": Vex.Flow.RESOLUTION / 48,
+  "32tr": Vex.Flow.RESOLUTION / 48,
+  "32td": (Vex.Flow.RESOLUTION / 48) + (Vex.Flow.RESOLUTION / 84),
   "b":    Vex.Flow.RESOLUTION / 32
 };
 
@@ -579,6 +594,65 @@ Vex.Flow.durationToGlyph.duration_codes = {
     code_flag_downstem: "v9a",
     dot: true
   },
+
+  "8t": { // Triplet Eighth note  -- TODO what other values do we need to change
+    code_head: "vb",
+    code_rest: "va5",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    beam_count: 1,
+    code_flag_upstem: "v54",
+    code_flag_downstem: "v9a"
+  },
+  "8th": { // Triplet Eighth note harmonic
+    code_head: "v22",
+    code_rest: "va5",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    beam_count: 1,
+    code_flag_upstem: "v54",
+    code_flag_downstem: "v9a"
+  },
+  "8tm": { // Triplet Eighth note muted
+    code_head: "v3e",
+    code_rest: "va5",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    beam_count: 1,
+    code_flag_upstem: "v54",
+    code_flag_downstem: "v9a"
+  },
+  "8tr": { // Triplet Eighth rest
+    code_head: "va5",
+    head_width: 10.5,
+    stem: false,
+    stem_offset: 0,
+    flag: false,
+    rest: true,
+    beam_count: 1,
+    position: "B/4"
+  },
+  "8td": { // Triplet Dotted eighth note
+    code_head: "vb",
+    code_rest: "va5",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    beam_count: 1,
+    code_flag_upstem: "v54",
+    code_flag_downstem: "v9a",
+    dot: true
+  },
+
+
+
   "16": { // Sixteenth note
     beam_count: 2,
     code_head: "vb",
@@ -634,6 +708,64 @@ Vex.Flow.durationToGlyph.duration_codes = {
     code_flag_downstem: "v8f",
     dot: true
   },
+
+  "16t": { // Sixteenth note
+    beam_count: 2,
+    code_head: "vb",
+    code_rest: "v3c",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v3f",
+    code_flag_downstem: "v8f"
+  },
+  "16th": { // Sixteenth note harmonic
+    beam_count: 2,
+    code_head: "v22",
+    code_rest: "v3c",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v3f",
+    code_flag_downstem: "v8f"
+  },
+  "16tm": { // Sixteenth note muted
+    beam_count: 2,
+    code_head: "v3e",
+    code_rest: "v3c",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v3f",
+    code_flag_downstem: "v8f"
+  },
+  "16tr": { // Sixteenth rest
+    beam_count: 2,
+    code_head: "v3c",
+    head_width: 10.5,
+    stem: false,
+    stem_offset: 0,
+    flag: false,
+    rest: true,
+    position: "B/4"
+  },
+  "16td": { // Dotted Sixteenth note
+    beam_count: 2,
+    code_head: "vb",
+    code_rest: "v3c",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v3f",
+    code_flag_downstem: "v8f",
+    dot: true
+  },
+
+
   "32": { // Thirty-second note
     beam_count: 3,
     code_head: "vb",
@@ -667,6 +799,16 @@ Vex.Flow.durationToGlyph.duration_codes = {
     code_flag_upstem: "v47",
     code_flag_downstem: "v2a"
   },
+  "32r": { // Thirty-second rest
+    beam_count: 3,
+    code_head: "v55",
+    head_width: 10.5,
+    stem: false,
+    stem_offset: 0,
+    flag: false,
+    rest: true,
+    position: "B/4"
+  },
   "32d": { // Dotted Thirty-second note
     beam_count: 3,
     code_head: "vb",
@@ -678,7 +820,41 @@ Vex.Flow.durationToGlyph.duration_codes = {
     code_flag_downstem: "v2a",
     stem: true
   },
-  "32r": { // Thirty-second rest
+
+  "32t": { // Thirty-second note
+    beam_count: 3,
+    code_head: "vb",
+    code_rest: "v55",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v47",
+    code_flag_downstem: "v2a"
+  },
+  "32th": { // Thirty-second harmonic
+    beam_count: 3,
+    code_head: "v22",
+    code_rest: "v55",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v47",
+    code_flag_downstem: "v2a"
+  },
+  "32tm": { // Thirty-second muted
+    beam_count: 3,
+    code_head: "v3e",
+    code_rest: "v55",
+    head_width: 10.5,
+    stem: true,
+    stem_offset: 0,
+    flag: true,
+    code_flag_upstem: "v47",
+    code_flag_downstem: "v2a"
+  },
+  "32tr": { // Thirty-second rest
     beam_count: 3,
     code_head: "v55",
     head_width: 10.5,
@@ -687,7 +863,19 @@ Vex.Flow.durationToGlyph.duration_codes = {
     flag: false,
     rest: true,
     position: "B/4"
+  },
+  "32td": { // Dotted Thirty-second note
+    beam_count: 3,
+    code_head: "vb",
+    code_rest: "v55",
+    head_width: 10.5,
+    dot: true,
+    flag: true,
+    code_flag_upstem: "v47",
+    code_flag_downstem: "v2a",
+    stem: true
   }
+
 };
 
 // Some defaults

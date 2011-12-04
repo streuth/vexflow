@@ -156,18 +156,21 @@ Vex.Flow.Beam.prototype.draw = function(notes) {
   }
 
   var that = this;
-  function getBeamLines(duration) {
+  function getBeamLines(num_beams) {
     var beam_lines = [];
     var beam_started = false;
 
     for (var i = 0; i < that.notes.length; ++i) {
       var note = that.notes[i];
-      var ticks = note.getTicks();
+//      var ticks = note.getTicks();
 
       // Atleast 8th note
-      if (ticks <= Vex.Flow.durationToTicks[duration]) {
+      if (Vex.Flow.durationToGlyph.duration_codes[note.duration].beam_count >= num_beams) { //Maybe better to use the beam type
         if (!beam_started) {
-          beam_lines.push({start: note.getStemX(), end: null});
+          var l = beam_lines.push({start: note.getStemX(), end: null});
+          if (l > 1) {
+            Console.log("Double beam line");
+          }
           beam_started = true;
         } else {
           var current_beam = beam_lines[beam_lines.length - 1];
@@ -201,12 +204,12 @@ Vex.Flow.Beam.prototype.draw = function(notes) {
     return beam_lines;
   }
 
-  var valid_beam_durations = ["8d", "16d", "32d"];
+  var valid_beam_durations = ["8d", "16d", "32d"]; //Not Valid when using tuples since a 1/8 triplet is less than a dotted 16th
 
   // Draw the beams.
   for (var i = 0; i < valid_beam_durations.length; ++i) {
     var duration = valid_beam_durations[i];
-    var beam_lines = getBeamLines(duration);
+    var beam_lines = getBeamLines(i+1);
 
     for (var j = 0; j < beam_lines.length; ++j) {
       var beam_line = beam_lines[j];
