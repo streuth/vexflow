@@ -33,6 +33,10 @@ Vex.Flow.Beam.prototype.init = function(notes) {
   // Validate beam line, direction and ticks.
   this.stem_direction = notes[0].getStemDirection();
   this.ticks = notes[0].getTicks();
+  this.tuple = Vex.Flow.isTuple(notes[0].getDuration());
+  if (this.tuple) {
+    console.log("YEA it's a tuple");
+  }
 
   if (this.ticks > Vex.Flow.durationToTicks["8d"]) {
     throw new Vex.RuntimeError("BadArguments",
@@ -83,10 +87,13 @@ Vex.Flow.Beam.prototype.draw = function(notes) {
   var last_note = this.notes[this.notes.length - 1];
 
   var first_y_px = first_note.getStemExtents().topY;
-  var last_y_px = last_note.getStemExtents().topY;
+  var start_y_px = first_y_px;
+//  var last_y_px = last_note.getStemExtents().topY;
 
   var first_x_px = first_note.getStemX();
-  var last_x_px = last_note.getStemX();
+  var start_x_px = first_x_px;
+//  var last_x_px = last_note.getStemX();
+
 
   var beam_width = this.render_options.beam_width * this.stem_direction;
 
@@ -156,20 +163,29 @@ Vex.Flow.Beam.prototype.draw = function(notes) {
   }
 
   var that = this;
-  function getBeamLines(num_beams) {
+  function getBeamLines(num_beams, duration) {
     var beam_lines = [];
     var beam_started = false;
 
     for (var i = 0; i < that.notes.length; ++i) {
       var note = that.notes[i];
-//      var ticks = note.getTicks();
+      var ticks = note.getTicks();
 
+      var oldWay = ticks <= Vex.Flow.durationToTicks[duration];
+      var newWay = Vex.Flow.durationToGlyph.duration_codes[note.duration].beam_count >= num_beams;
+
+      if (oldWay != newWay) {
+        console.log("DIFF");
+      }
+      else {
+        console.log(duration);
+      }
       // Atleast 8th note
       if (Vex.Flow.durationToGlyph.duration_codes[note.duration].beam_count >= num_beams) { //Maybe better to use the beam type
         if (!beam_started) {
           var l = beam_lines.push({start: note.getStemX(), end: null});
           if (l > 1) {
-            Console.log("Double beam line");
+            console.log("Double beam line");
           }
           beam_started = true;
         } else {
@@ -209,7 +225,7 @@ Vex.Flow.Beam.prototype.draw = function(notes) {
   // Draw the beams.
   for (var i = 0; i < valid_beam_durations.length; ++i) {
     var duration = valid_beam_durations[i];
-    var beam_lines = getBeamLines(i+1);
+    var beam_lines = getBeamLines(i+1, duration);
 
     for (var j = 0; j < beam_lines.length; ++j) {
       var beam_line = beam_lines[j];
@@ -225,11 +241,54 @@ Vex.Flow.Beam.prototype.draw = function(notes) {
       this.context.lineTo(last_x + 1, last_y + beam_width + y_shift);
       this.context.lineTo(last_x + 1, last_y + y_shift);
       this.context.closePath();
+
+
       this.context.fill();
     }
 
     first_y_px += beam_width * 1.5;
-    last_y_px += beam_width * 1.5;
+  }
+
+
+  //TODO mhowe This needs to be out of this loop - in fact we will just draw an other line with offset
+  //which should take of up or down as well
+  if (this.tuple) {
+    first_y_px = start_y_px; //Reset to the first line position
+    first_y_px += -beam_width * 1.5; //Move it the other direction
+
+    var first_x = beam_line.start;
+    var first_y = getSlopeY(first_x);
+
+    var last_x = beam_line.end;
+    var last_y = getSlopeY(last_x);
+
+    this.context.beginPath();
+    this.context.moveTo(first_x, first_y + y_shift);
+    this.context.lineTo(first_x, first_y + (beam_width/4) + y_shift);
+    this.context.lineTo(last_x + 1, last_y + (beam_width/4) + y_shift);
+    this.context.lineTo(last_x + 1, last_y + y_shift);
+    this.context.closePath();
+
+    this.context.fill();
+
+
+    //TODO mhowe this whole thing needs better logic for determining the total, including note duration etc.
+    if( that.notes.length == 3) {
+      var glyph = Vex.Flow.tabToGlyph(3);
+    }
+    else if ( that.notes.length > 3) {
+      var glyph = Vex.Flow.tabToGlyph(6);
+    }
+    var x = first_x + Math.abs(last_x - first_x)/2;
+//    var y = first_y + Math.abs(first_y - last_y)/2 - 8;
+    var y = first_y + Math.abs(first_y - last_y)/2;
+    if (glyph.code) {
+      Vex.Flow.renderGlyph(this.context, x, y  + glyph.shift_y,
+          this.render_options.glyph_font_scale, glyph.code);
+    } else {
+      var text = glyph.text.toString();
+      this.context.fillText(text, x, y );
+    }
   }
 
   return true;

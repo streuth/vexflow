@@ -7,9 +7,62 @@ Vex.Flow.Test.Tuple = {}
 
 Vex.Flow.Test.Tuple.Start = function () {
   module("Stave");
-  Vex.Flow.Test.runTest("Tuple Test (Canvas)",
-    Vex.Flow.Test.Tuple.drawMultipleMeasures);
+//  Vex.Flow.Test.runTest("Tuple Test (Canvas)", Vex.Flow.Test.Tuple.drawMultipleMeasures);
+  Vex.Flow.Test.runTest("Sixteenth Beam", Vex.Flow.Test.Tuple.sixteenth);
 }
+
+Vex.Flow.Test.Tuple.sixteenth = function(options) {
+//  var ctx = contextBuilder(options.canvas_sel, 550, 200);
+  var ctx = Vex.Flow.Test.Tuple.setupContext(options);
+  function newNote(note_struct) { return new Vex.Flow.StaveNote(note_struct); }
+  function newAcc(type) { return new Vex.Flow.Accidental(type); }
+
+//  var notes = [
+//    newNote({ keys: ["f/5"], stem_direction: -1, duration: "16t"}),
+//    newNote({ keys: ["f/5"], stem_direction: -1, duration: "16t"}),
+//    newNote({ keys: ["d/5"], stem_direction: -1, duration: "16t"}),
+//    newNote({ keys: ["c/5"], stem_direction: -1, duration: "16t"}),
+//    newNote({ keys: ["c/5"], stem_direction: -1, duration: "16t"}),
+//    newNote({ keys: ["d/5"], stem_direction: -1, duration: "16t"}),
+//    newNote({ keys: ["f/5"], stem_direction: -1, duration: "hd"})
+//  ];
+  var notes = [
+    newNote({ keys: ["f/5"], stem_direction: 1, duration: "16t"}),
+    newNote({ keys: ["f/5"], stem_direction: 1, duration: "16t"}),
+    newNote({ keys: ["d/5"], stem_direction: 1, duration: "16t"}),
+    newNote({ keys: ["c/5"], stem_direction: 1, duration: "16t"}),
+    newNote({ keys: ["c/5"], stem_direction: 1, duration: "16t"}),
+    newNote({ keys: ["d/5"], stem_direction: 1, duration: "16t"}),
+    newNote({ keys: ["f/5"], stem_direction: 1, duration: "hd"})
+  ];
+
+
+  var voice = new Vex.Flow.Voice(Vex.Flow.Test.TIME4_4);
+  voice.addTickables(notes);
+
+  var formatter = new Vex.Flow.Formatter().joinVoices([voice]).
+    format([voice], 300);
+  var beam1 = new Vex.Flow.Beam(notes.slice(0, 6));
+
+
+  voice.draw(ctx.context, ctx.stave);
+  beam1.setContext(ctx.context).draw();
+
+  ok(true, "Sixteenth Test");
+}
+
+
+Vex.Flow.Test.Tuple.setupContext = function(options, x, y) {
+  Vex.Flow.Test.resizeCanvas(options.canvas_sel, x || 450, y || 140);
+  var ctx = Vex.getCanvasContext(options.canvas_sel);
+  ctx.scale(0.9, 0.9); ctx.fillStyle = "#221"; ctx.strokeStyle = "#221";
+  ctx.font = " 10pt Arial";
+  var stave = new Vex.Flow.Stave(10, 10, x || 450).addTrebleGlyph().
+    setContext(ctx).draw();
+
+  return {context: ctx, stave: stave};
+}
+
 
 Vex.Flow.Test.Tuple.drawMultipleMeasures = function (options, contextBuilder) {
   // Get the rendering context
@@ -51,7 +104,7 @@ Vex.Flow.Test.Tuple.drawMultipleMeasures = function (options, contextBuilder) {
   var notesBar2_part2 = [
     new Vex.Flow.StaveNote({ keys:["c/4"], duration:"8" }),
     new Vex.Flow.StaveNote({ keys:["d/4"], duration:"16" }),
-    new Vex.Flow.StaveNote({ keys:["d/4"], duration:"16" }),
+    new Vex.Flow.StaveNote({ keys:["d/4"], duration:"16" })
 //    new Vex.Flow.StaveNote({ keys:["e/4"], duration:"h" })
   ];
   var notesBar2_part3 = [

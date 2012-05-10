@@ -137,6 +137,11 @@ Vex.Flow.TabNote.prototype.draw = function() {
   if (this.ys.length == 0) throw new Vex.RERR("NoYValues",
       "Can't draw note without Y values.");
 
+  //TODO mhowe If this is a rest then don't draw anything - would be nice to have some representation just for this case
+  if (this.duration.indexOf("r") >= 0) {
+    return;
+  }
+
   var ctx = this.context;
   var x = this.getAbsoluteX();
   var ys = this.ys;

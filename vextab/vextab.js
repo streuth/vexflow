@@ -399,6 +399,7 @@ Vex.Flow.VexTab.prototype.parseToken = function(str) {
     vibratos: [],             // Vibrations associated with positions
     ties: [],                 // Ties associated with positions
     chord_ties: [],           // Chord ties associated with positions
+    rest: false, //TODO mhowe
 
     inside_bend: false,       // Are we inside a bend
     chord_index: -1          // The current chord index
@@ -409,6 +410,9 @@ Vex.Flow.VexTab.prototype.parseToken = function(str) {
     switch (this.parse_state.value) {
       case "(": this.parseOpenChord(); break;
       case "t": this.parseTapAnnotation(); break;
+
+      case ":": this.parseRestDuration();break;  //TODO mhowe Probably going to really break things
+
       default: this.parseFret();
     }
 
@@ -419,19 +423,46 @@ Vex.Flow.VexTab.prototype.parseToken = function(str) {
 Vex.Flow.VexTab.validDurations = {
   "w": "w",
   "h": "h",
+  "hr": "hr", //TODO doesn't break the parser but doesn't do anything either
   "q": "q",
   "8": "8",
   "8d": "8d",
-//  "8t": "8t",
-//  "8td": "8td",
+  "8t": "8t",
+  "8td": "8td",
   "16": "16",
   "16d": "16d",
-//  "16t": "16t",
-//  "16td": "16td",
+  "16t": "16t",
+  "16td": "16td",
   "32": "32",
   "32d": "32d",
-//  "32t": "32t",
-//  "32td": "32td"
+  "32t": "32t",
+  "32td": "32td"
+}
+
+/**
+ * Parse ":" - Note duration
+ *
+ * @private
+ */
+Vex.Flow.VexTab.prototype.parseRestDuration = function() {
+  this.getNextDurationToken();
+
+  var duration = Vex.Flow.VexTab.validDurations[this.parse_state.value];
+  if (duration) {
+    this.state.current_duration = duration;
+    this.state.rest = this.parse_state.value.indexOf("r") >= 0;
+  } else {
+    this.parseError("Invalid duration: " + this.parse_state.value);
+  }
+
+  if (!this.parse_state.done) {
+    this.getNextDurationToken();
+    if (this.parse_state.value != ":")
+      this.parseError("Unexpected token: " + this.parse_state.str);
+
+    if (!this.parse_state.done)
+      this.parseError("Unexpected token: " + this.parse_state.str);
+  }
 }
 
 /**
@@ -831,6 +862,14 @@ Vex.Flow.VexTab.prototype.genElements = function() {
   var clef = this.state.clef;
   var tabnotes = [];
   var notes = [];
+  if (this.state.rest) {
+    //TODO - keys will have to change based on value of duration
+    var note = new Vex.Flow.StaveNote({keys: ["b/4"], duration: this.state.current_duration });
+    notes.push(note);
+    var tabnote = new Vex.Flow.TabNote(
+        {positions: [{fret: "0", str:"0"}], duration: this.state.current_duration});
+    tabnotes.push({note: tabnote, persist: true});
+  }
 
   // Associate notes with relevant positions.
   for (var i = 0; i < positions.length; ++i) {
@@ -1127,7 +1166,7 @@ Vex.Flow.VexTab.prototype.parseOpenBeam = function() {
 
 Vex.Flow.VexTab.prototype.parseCloseBeam = function() {
   if (this.state.beam_start == null)
-    this.parseError("Can't close beam without openeing: ]");
+    this.parseError("Can't close beam without opening: ]");
 
   var beam_end = this.elements.notes[this.state.current_stave].length;
 

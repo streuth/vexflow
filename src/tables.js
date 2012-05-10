@@ -410,6 +410,10 @@ Vex.Flow.durationToTicks = {
   "b":    Vex.Flow.RESOLUTION / 32
 };
 
+Vex.Flow.isTuple = function(duration) {
+  return duration.indexOf('t') >= 0;
+}
+
 Vex.Flow.durationToGlyph = function(duration) {
   return Vex.Flow.durationToGlyph.duration_codes[duration];
 }
